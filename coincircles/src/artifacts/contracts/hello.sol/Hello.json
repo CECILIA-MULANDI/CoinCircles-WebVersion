@@ -1,0 +1,31 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Hello",
+  "sourceName": "contracts/hello.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "SayHello",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "Greeting",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b5060b08061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80637d40a30114602d575b600080fd5b60336035565b005b3373ffffffffffffffffffffffffffffffffffffffff167f427c62ac3dd69eb14c8bd7612d8e06fc99514947f69f7f17f120a209aa405dfa60405160405180910390a256fea26469706673582212209615f186c7f9b0512e15c0656e822710f590c0a6b40c04c402e61ee7c4bab94c64736f6c63430008180033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c80637d40a30114602d575b600080fd5b60336035565b005b3373ffffffffffffffffffffffffffffffffffffffff167f427c62ac3dd69eb14c8bd7612d8e06fc99514947f69f7f17f120a209aa405dfa60405160405180910390a256fea26469706673582212209615f186c7f9b0512e15c0656e822710f590c0a6b40c04c402e61ee7c4bab94c64736f6c63430008180033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
