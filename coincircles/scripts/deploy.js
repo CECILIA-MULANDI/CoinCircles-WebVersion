@@ -7,11 +7,11 @@ async function main() {
 
         console.log("Deploying contracts with the account:", deployer.address);
 
-        const Hello = await ethers.getContractFactory("Hello");
-        const helloContract = await Hello.deploy();
-        const contract_address = await helloContract.getAddress();
+        const CoinCircles = await ethers.getContractFactory("CoinCircles");
+        const CoinCirclesContract = await CoinCircles.deploy();
+        const contract_address = await CoinCirclesContract.getAddress();
 
-        console.log("Hello contract address:", contract_address);
+        console.log("CoinCircles contract address:", contract_address);
     } catch (error) {
         console.error("Error deploying contract:", error);
         process.exit(1);
