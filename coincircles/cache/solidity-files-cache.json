@@ -2,13 +2,12 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\Admin\\Documents\\FOURTH YEAR\\4.1\\Final Year Project\\CoinCirclesWebVersion\\coincircles\\contracts\\hello.sol": {
-      "lastModificationDate": 1712647164811,
-      "contentHash": "e8789257176fc10060e53de3f6f76354",
+      "lastModificationDate": 1713879527586,
+      "contentHash": "8ed44514c89ae70b970203f540594a19",
       "sourceName": "contracts/hello.sol",
       "solcConfig": {
-        "version": "0.8.24",
+        "version": "0.8.19",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -31,7 +30,7 @@
       },
       "imports": [],
       "versionPragmas": [
-        "0.8.24"
+        "0.8.19"
       ],
       "artifacts": [
         "CoinCircles"
