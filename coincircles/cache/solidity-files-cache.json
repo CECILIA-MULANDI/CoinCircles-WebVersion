@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\Admin\\Documents\\FOURTH YEAR\\4.1\\Final Year Project\\CoinCirclesWebVersion\\coincircles\\contracts\\hello.sol": {
-      "lastModificationDate": 1713879527586,
-      "contentHash": "8ed44514c89ae70b970203f540594a19",
+      "lastModificationDate": 1713998322012,
+      "contentHash": "df7a9a3f483003bdd16fa122a01fddec",
       "sourceName": "contracts/hello.sol",
       "solcConfig": {
         "version": "0.8.19",

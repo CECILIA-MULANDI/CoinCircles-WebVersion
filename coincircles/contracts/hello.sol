@@ -15,6 +15,12 @@ contract CoinCircles{
         uint256 maxNoOfPeople;
         uint256 minDeposit;
         bool isFull;
+        ChamaVisibility visibility;
+    }
+    // enums
+    enum ChamaVisibility{
+        Public,
+        Private 
     }
     // mappings
     mapping (address=>User) public users;
@@ -42,7 +48,7 @@ contract CoinCircles{
     }
 
     // create chama function
-    function create_chama(string memory _name,string memory _purpose,uint256 _maxNoPeople,uint256 _minDeposit) public{
+    function create_chama(string memory _name,string memory _purpose,uint256 _maxNoPeople,uint256 _minDeposit,ChamaVisibility _visibility) public{
         // check if the user is logged in
         require(users[msg.sender].isConnected,"User is not connected");
         // check if there is a chama with the same name
@@ -55,7 +61,8 @@ contract CoinCircles{
             purpose:_purpose,
            maxNoOfPeople:_maxNoPeople,
             minDeposit:_minDeposit,
-            isFull:false
+            isFull:false,
+            visibility:_visibility
         });
         chamas[chamaIds]=new_chama;
         chamaIds++;
