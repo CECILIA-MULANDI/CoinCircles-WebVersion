@@ -1,79 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/esm/Button';
-import { ethers } from 'ethers';
-import { ContractAddress } from '../../constants/constants';
-import contractAbi from "../../artifacts/contracts/hello.sol/CoinCircles.json";
-
+// import { ethers } from 'ethers';
+import { useEffect, useState } from 'react';
+import Button from "react-bootstrap/Button";
+// import { ContractAddress } from '../../constants/constants';
+// import ContractAbi from "../../artifacts/contracts/hello.sol/CoinCircles.json"
+import { connectUser } from '../CallContractFunctions/ContractFunctions';
+// import { initContract } from '../CallContractFunctions/ContractFunctions';
+import { disconnectWallet } from '../CallContractFunctions/ContractFunctions';
 export default function ConnectWallet() {
-    const [defaultAddress, setDefaultAddress] = useState(null);
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [contract, setContract] = useState(null);
+  const [walletAddress,setWalletAddress] = useState(null);
+  const [error, setError] = useState(null);
+  const [provider,setProvider]=useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [contract,setContract]=useState(null);
   
-    useEffect(() => {
-      const connectToContract = async () => {
-        if (window.ethereum) {
-          try {
+  const [isConnected, setIsConnected] = useState(false);
 
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            await provider.send("eth_requestAccounts", []);
-            const signer = provider.getSigner();
-            const contractAddress = ethers.utils.getAddress(ContractAddress);
-            const contract = new ethers.Contract(contractAddress, contractAbi.abi, signer);
-            setContract(contract);
-          } catch (error) {
-            console.error('Error connecting to contract:', error);
-          }
-        } else {
-          setErrorMessage('Kindly install MetaMask');
-        }
-      };
+  // const [message,setMessage]=useState()
   
-      connectToContract();
-    }, []);
-  
-    const connectWallet = async () => {
-        try {
-          if (window.ethereum) {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            const userAddress = await signer.getAddress();
-            accountChanged(userAddress);
-            if (contract) {
-              // Call your contract's connect_user function
-              const transaction = await contract.connect_user();
-              await transaction.wait(); // Wait for transaction to be mined
-              // Update user's address after transaction is confirmed
-              const updatedUserAddress = await signer.getAddress();
-              accountChanged(updatedUserAddress);
-            } else {
-              setErrorMessage('Contract not loaded');
-            }
-          } else {
-            setErrorMessage('Kindly install MetaMask');
-          }
-        } catch (error) {
-          setErrorMessage('Error connecting to wallet');
-          console.error(error);
-        }
-      };
-      
-     
-      
-  
-    const accountChanged = (accountName) => {
-      setDefaultAddress(accountName);
-    };
-    return (
-        <>
-          {defaultAddress ? (
-            <h3>Address: {defaultAddress.substring(0, 10)}...</h3>
-          ) : (
-            <>
-              <Button onClick={connectWallet}>Connect Wallet</Button>
-              {errorMessage && <p>{errorMessage}</p>}
-            </>
-          )}
-        </>
-      );
-    }          
+
+  // const connectWallet = async () => {
+  //   if (window.ethereum) {
+  //     try {
+  //       // Requesting access to user accounts
+  //     let accounts=  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  //       // Creating a provider
+  //     let web3provider=new ethers.providers.Web3Provider(window.ethereum);
+  //       // setProvider(provider);
+       
+  //       setProvider(web3provider);
+  //       // call the contract
+  //       const contract=new ethers.Contract(ContractAddress,ContractAbi.abi,web3provider.getSigner());
+  //       setContract(contract);
+  //       // check if the user is already connected
+  //       const Connected= await contract.users(accounts[0]);
+  //       if(Connected.isConnected){
+  //         setIsConnected(true);
+  //         setWalletAddress(accounts[0]);
+  //       }else{
+  //         // call the contract fn
+  //         const tx = await contract.connect_user();
+  //       await tx.wait();
+  //       setWalletAddress(accounts[0]);
+
+  //       }
+  //       setError(null);
+  //     } catch (err) {
+  //       setError('Error connecting to wallet');
+  //       console.error(err);
+  //     }
+  //   } else {
+  //     setError('Please install MetaMask');
+  //   }
+  // }
+  // const disconnectWallet=()=>{
+
+  // }
+
+  useEffect(() => {
+    try{
+    // initContract()
+    // connectUser(setWalletAddress,setIsConnected,setContract,setProvider)
+
+    }catch(e){
+      setError('Error connecting to wallet');
+    console.error(e);
+
+    }
+    // Checking if MetaMask is installed and connected on component mount
+    
+  }, []);
+
+  return (
+    <>
+  {walletAddress ? (
+      <>
+        <h3>Address: {walletAddress.substring(0, 5)}</h3>
+        {isConnected ? (
+          <Button onClick={disconnectWallet}>Disconnect</Button>
+        ) : (
+          <Button onClick={() => connectUser(setWalletAddress, setIsConnected, setContract, setProvider)}>Connect</Button>
+        )}
+      </>
+    ) : (
+      <Button onClick={() => connectUser(setWalletAddress, setIsConnected, setContract, setProvider)}>Connect</Button>
+    )}
+    {error && <p>{error}</p>}
+    </>
+  );
+}
