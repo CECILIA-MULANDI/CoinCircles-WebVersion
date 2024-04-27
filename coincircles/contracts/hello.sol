@@ -73,3 +73,5 @@ contract CoinCircles{
 
     }
 }
+
+// check if the length is empty 

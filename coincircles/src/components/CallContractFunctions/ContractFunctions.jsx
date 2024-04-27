@@ -50,7 +50,7 @@ export const disconnectWallet=(setWalletAddress)=>{
     setWalletAddress(null)
 }
 
-export const CreateChamas=async(_name,_purpose,_maxNoPeople,_minDeposit,_visibility)=>{
+export const CreateChamas=async(_name,_purpose,_maxNoPeople,_minDeposit,_visibility,setSuccessMessage)=>{
     // get provider
     const provider=new ethers.providers.Web3Provider(window.ethereum);
     let signer=provider.getSigner();
@@ -61,6 +61,11 @@ export const CreateChamas=async(_name,_purpose,_maxNoPeople,_minDeposit,_visibil
 
         const tx=await contract.create_chama(_name,_purpose,_maxNoPeople,_minDeposit,_visibility);
         tx.wait();
+        // listen to events
+        contract.once('ChamaCreated',(chamaId,name)=>{
+            setSuccessMessage(`Chama ${name} created successfully with ID ${chamaId}`);
+
+        })
         console.log('Chama created successfully');
     }catch(e){
         console.log(e)
