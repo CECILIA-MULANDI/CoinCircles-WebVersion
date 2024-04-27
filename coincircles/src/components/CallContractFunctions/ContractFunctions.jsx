@@ -2,19 +2,8 @@
 import ContractAbi from "../../artifacts/contracts/hello.sol/CoinCircles.json"
 import { ContractAddress } from "../../constants/constants"
 import { ethers } from "ethers"
-// import ConnectWallet from "../ConnectWallet/ConnectWallet"
-// let provider;
-// let  contractInstance;
-// export const  initContract=()=>{
-//     if(window.ethereum){
-//         provider=new ethers.providers.Web3Provider(window.ethereum);
-//         contractInstance=new ethers.Contract(ContractAddress,ContractAbi.abi, provider.getSigner());
 
-//     }else{
-//         throw new Error('Please install Metamask')
-//     }
-// }
-export const connectUser=async(setWalletAddress,setIsConnected,setContract,setProvider)=>{
+export const connectUser=async(setWalletAddress,setIsConnected,setContract,setProvider,setError)=>{
     
     if(window.ethereum){
         try{
@@ -24,7 +13,7 @@ export const connectUser=async(setWalletAddress,setIsConnected,setContract,setPr
             setProvider(web3provider);
             const contract= await new ethers.Contract(ContractAddress,ContractAbi.abi,web3provider.getSigner(accounts[0]));
             setContract(contract);
-            // const isConnected=await contractInstance.users(accounts[0]);
+            
             // CHECK IF USER IS CONNECTED **
             const connected=await contract.users(accounts[0]);
             console.log(connected)
@@ -45,22 +34,39 @@ export const connectUser=async(setWalletAddress,setIsConnected,setContract,setPr
 
         }catch(err){
             // throw new Error('Error Connecting to wallet')
-            // setError('Error connecting to wallet');
+            setError('Error connecting to wallet');
             // console.error(err);
             console.log(err)
 
         }
         }
     else{
+        setError('Please install Metamask');
         console.log('Please install Metamask')
     }
 
 }
-export const disconnectWallet=()=>{
-    console.log("disconnected")
+export const disconnectWallet=(setWalletAddress)=>{
+    setWalletAddress(null)
 }
 
-export const CreateChamas=async()=>{
+export const CreateChamas=async(_name,_purpose,_maxNoPeople,_minDeposit,_visibility)=>{
+    // get provider
+    const provider=new ethers.providers.Web3Provider(window.ethereum);
+    let signer=provider.getSigner();
+// create an instance of the contract
+    let contract = new ethers.Contract(ContractAddress,ContractAbi.abi,signer);
+    console.log(signer);
+    try{
+
+        const tx=await contract.create_chama(_name,_purpose,_maxNoPeople,_minDeposit,_visibility);
+        tx.wait();
+        console.log('Chama created successfully');
+    }catch(e){
+        console.log(e)
+        
+    }
+    
  
    
 
