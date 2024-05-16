@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import Form  from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
+import { ethers } from 'ethers';
 import { CreateChamas } from '../CallContractFunctions/ContractFunctions';
 export default function CreateChama() {
 
-
+  console.log(ethers.version);
 
     const [name,setName]=useState('');
     const [purpose,setPurpose]=useState('');
@@ -19,7 +20,7 @@ export default function CreateChama() {
       e.preventDefault();
       try {
         await CreateChamas(name, purpose, parseInt(maxPeople), parseInt(minDeposit), visibilityValue,setSuccessMessage);
-        console.log('submitted')
+       
       } catch (error) {
         console.error(error);
       }

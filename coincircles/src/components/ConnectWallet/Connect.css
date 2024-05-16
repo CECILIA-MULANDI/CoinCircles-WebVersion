@@ -1,0 +1,13 @@
+.connect-btn {
+    border-radius: 20px;
+    padding: 2vh 2wh;
+    background-color: #232939;
+    color: #FFFF;
+    border: none;
+}
+
+.connect-btn:hover {
+    background-color: #FFFF;
+    color: #000;
+    font-size: larger;
+}

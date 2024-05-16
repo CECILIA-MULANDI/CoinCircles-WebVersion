@@ -4,15 +4,15 @@ import Navbar from 'react-bootstrap/Navbar';
 import "./css/NavBar.css"
 import ConnectWallet from './ConnectWallet/ConnectWallet';
 
-function BasicExample() {
+function NavBar() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="">
       <Container>
         <Navbar.Brand href="#home">LOGO</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
+          <Nav className="ms-auto navlinks">
+            <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/about-us">About Us</Nav.Link>
             <Nav.Link href="/contact-us">Contact Us</Nav.Link>
           </Nav>
@@ -27,4 +27,4 @@ function BasicExample() {
   );
 }
 
-export default BasicExample;
+export default  NavBar;

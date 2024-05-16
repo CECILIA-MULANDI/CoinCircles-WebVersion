@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 // import { ContractAddress } from '../../constants/constants';
 // import ContractAbi from "../../artifacts/contracts/hello.sol/CoinCircles.json"
 import { connectUser } from '../CallContractFunctions/ContractFunctions';
-// import { initContract } from '../CallContractFunctions/ContractFunctions';
+import "./Connect.css"
 import { disconnectWallet } from '../CallContractFunctions/ContractFunctions';
 export default function ConnectWallet() {
   const [walletAddress,setWalletAddress] = useState(null);
@@ -26,13 +26,13 @@ export default function ConnectWallet() {
       <>
         <h3>Address: {walletAddress.substring(0, 5)}</h3>
         {isConnected ? (
-          <Button onClick={()=>disconnectWallet(setWalletAddress)}>Disconnect</Button>
+          <Button className="connect-btn" onClick={()=>disconnectWallet(setWalletAddress)}>Disconnect</Button>
         ) : (
-          <Button onClick={() => connectUser(setWalletAddress, setIsConnected, setContract, setProvider,setError)} >Connect</Button>
+          <Button className="connect-btn" onClick={() => connectUser(setWalletAddress, setIsConnected, setContract, setProvider,setError)} >Connect</Button>
         )}
       </>
     ) : (
-      <Button onClick={() => connectUser(setWalletAddress, setIsConnected, setContract, setProvider,setError)}>Connect</Button>
+      <Button className="connect-btn" onClick={() => connectUser(setWalletAddress, setIsConnected, setContract, setProvider,setError)}>Connect</Button>
     )}
     {error && <p>{error}</p>}
     </>
