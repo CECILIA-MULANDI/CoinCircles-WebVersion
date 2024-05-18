@@ -15,8 +15,12 @@ contract CoinCircles{
     struct Profile{
         address users_wallet_address;
         mapping(string=>uint256) contributionsMade;
-       
-
+    }
+    struct Voting{
+        bool isActive;
+        mapping (address=>bool) votes;
+        uint256 totalVotes;
+        address recipient;
     }
 
     // create  a chama
@@ -48,6 +52,7 @@ contract CoinCircles{
     mapping (uint256=>Chama) public chamas;
     mapping(address => mapping(uint256 => bool)) public hasContributed;
     mapping(address => mapping(uint256 => bool)) public fundsReceived;
+    mapping(uint256 => Voting) public votings;
     // events
     event UserConnected(address wallet_address);
     event ChamaCreated(uint256 chamaIds,string name);
@@ -185,8 +190,9 @@ contract CoinCircles{
         emit ContributionMade(_name, msg.sender, _userContribution);
 
         if (allMembersContributedInCurrentRound(_name)) {
-            // Perform distribution of funds
-            distributeFunds(_name);
+            // Get the address of the next recipient
+           startVoting(_name, getCurrentRecipient(_name));
+
             // Increment the current round
             chamas[chamaId].currentRound++;
             // Reset contributions for the next round
@@ -197,29 +203,106 @@ contract CoinCircles{
             chamas[chamaId].hasContributed.push(msg.sender);
         }
     }
+    function hasMemberReceivedFunds(string memory _chamaName, address _memberAddress, uint256 _round) public view returns (bool) {
+        uint256 chamaId = getChamaId(_chamaName);
+        require(chamaExists(_chamaName), "Chama does not exist");
+        require(isMember(_chamaName, _memberAddress), "Address is not a member of this chama");
 
-   function distributeFunds(string memory _name) private {
-    uint256 chamaId = getChamaId(_name);
-    uint256 totalFunds = address(this).balance;
-    uint256 distributionAmount = totalFunds / chamas[chamaId].listOfMembers.length;
-
-    // Distribute funds to the next member in the rotation
-    address payable nextMember = payable(chamas[chamaId].listOfMembers[lastDistributedMemberIndex]);
-    nextMember.transfer(distributionAmount);
-    emit FundsDistributed(_name, nextMember, distributionAmount);
-    emit FundsReceived(_name, nextMember, distributionAmount); // Emit event to log funds received by the member
-
-    // Update the state to mark the member as having received funds
-    fundsReceived[nextMember][chamas[chamaId].currentRound] = true;
-
-    // Update the index of the last member who received funds
-    lastDistributedMemberIndex++;
-
-    // Reset index if it exceeds the number of members
-    if (lastDistributedMemberIndex >= chamas[chamaId].listOfMembers.length) {
-        lastDistributedMemberIndex = 0;
-    }
+        return fundsReceived[_memberAddress][_round];
 }
+    function getCurrentRecipient(string memory _chamaName) public view returns (address) {
+        uint256 chamaId = getChamaId(_chamaName);
+        require(chamaExists(_chamaName), "Chama does not exist");
+        require(votings[chamaId].isActive, "No active voting process");
+
+        return votings[chamaId].recipient;
+    }
+
+    function startVoting(string memory _name, address _recipient) public {
+        uint256 chamaId = getChamaId(_name);
+        require(chamaExists(_name), "Chama does not exist");
+        require(chamas[chamaId].owner == msg.sender, "Only the owner can start the voting process");
+
+        Voting storage voting = votings[chamaId];
+        require(!voting.isActive, "Voting is already active");
+
+        voting.isActive = true;
+        voting.recipient = _recipient;
+        voting.totalVotes = 0;
+
+        // Reset votes
+        for (uint256 i = 0; i < chamas[chamaId].listOfMembers.length; i++) {
+            voting.votes[chamas[chamaId].listOfMembers[i]] = false;
+        }
+    }
+    function castVote(string memory _name) public {
+        uint256 chamaId = getChamaId(_name);
+        require(chamaExists(_name), "Chama does not exist");
+        require(isMember(_name, msg.sender), "You are not a member of this chama");
+
+        Voting storage voting = votings[chamaId];
+        require(voting.isActive, "No active voting process");
+        require(!voting.votes[msg.sender], "You have already voted");
+
+        voting.votes[msg.sender] = true;
+        voting.totalVotes++;
+
+        if (voting.totalVotes == chamas[chamaId].listOfMembers.length) {
+            finalizeVoting(_name);
+        }
+    }
+    function finalizeVoting(string memory _name) private {
+        uint256 chamaId = getChamaId(_name);
+        Voting storage voting = votings[chamaId];
+
+        require(voting.isActive, "No active voting process");
+        require(voting.totalVotes == chamas[chamaId].listOfMembers.length, "Voting is not complete");
+
+        voting.isActive = false;
+
+        distributeFunds(_name);
+    }
+
+
+
+
+//    function distributeFunds(string memory _name) private {
+//     uint256 chamaId = getChamaId(_name);
+//     uint256 totalFunds = address(this).balance;
+//     uint256 distributionAmount = totalFunds / chamas[chamaId].listOfMembers.length;
+
+//     // Distribute funds to the next member in the rotation
+//     address payable nextMember = payable(chamas[chamaId].listOfMembers[lastDistributedMemberIndex]);
+//     nextMember.transfer(distributionAmount);
+//     emit FundsDistributed(_name, nextMember, distributionAmount);
+//     emit FundsReceived(_name, nextMember, distributionAmount); // Emit event to log funds received by the member
+
+//     // Update the state to mark the member as having received funds
+    
+//     fundsReceived[nextMember][chamas[chamaId].currentRound] = true;
+
+//     // Update the index of the last member who received funds
+//     lastDistributedMemberIndex++;
+
+//     // Reset index if it exceeds the number of members
+//     if (lastDistributedMemberIndex >= chamas[chamaId].listOfMembers.length) {
+//         lastDistributedMemberIndex = 0;
+//     }
+// }
+    function distributeFunds(string memory _name) private {
+        uint256 chamaId = getChamaId(_name);
+        uint256 totalFunds = address(this).balance;
+        uint256 distributionAmount = totalFunds / chamas[chamaId].listOfMembers.length;
+
+        // Get the current recipient from the voting process
+        address payable recipient = payable(getCurrentRecipient(_name));
+        recipient.transfer(distributionAmount);
+        emit FundsDistributed(_name, recipient, distributionAmount);
+        emit FundsReceived(_name, recipient, distributionAmount); // Emit event to log funds received by the member
+
+        // Update the state to mark the member as having received funds
+        fundsReceived[recipient][chamas[chamaId].currentRound] = true;
+    }
 
 
 
