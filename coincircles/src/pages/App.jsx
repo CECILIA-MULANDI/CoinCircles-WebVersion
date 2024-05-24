@@ -5,7 +5,7 @@
 
 import CreateChama from "../components/CreateChama/CreateChama";
 import NavBar from "../components/NavBar";
-import Home from "../pages/Home/Homeb"
+import Home from "../pages/Home/Home"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./css/App.css"
 // contract address
