@@ -4,10 +4,10 @@ import React from "react";
 // import Hello from "./artifacts/contracts/hello.sol/CoinCircles.json";
 
 // import CreateChama from "../components/CreateChama/CreateChama";
-import NavBar from "../components/NavBar";
-import Home from "../pages/Home/Home"
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home/Home"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./css/App.css"
+// import ""
 // contract address
 // const ContractAddress = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707';
 function App() {
