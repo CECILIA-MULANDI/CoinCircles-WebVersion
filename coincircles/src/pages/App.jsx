@@ -1,4 +1,4 @@
-
+import React from "react";
 // import   {ethers} from "ethers";
 // we need the abi
 // import Hello from "./artifacts/contracts/hello.sol/CoinCircles.json";
