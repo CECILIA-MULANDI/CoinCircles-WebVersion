@@ -3,7 +3,7 @@
 // we need the abi
 // import Hello from "./artifacts/contracts/hello.sol/CoinCircles.json";
 
-import CreateChama from "../components/CreateChama/CreateChama";
+// import CreateChama from "../components/CreateChama/CreateChama";
 import NavBar from "../components/NavBar";
 import Home from "../pages/Home/Home"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
