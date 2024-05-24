@@ -13,12 +13,12 @@ import "./css/App.css"
 function App() {
     return ( 
         < div className = "App" >
-           < NavBar/>
+           {/* < NavBar/> */}
            {/* <CreateChama/> */}
 
            <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home/>}>
+        <Route path="/home" element={<Home/>}>
           
         </Route>
       </Routes>
